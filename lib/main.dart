@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:puzzle_Store/screens/log_in_screen.dart';
-import 'package:puzzle_Store/screens/sign_up_screen.dart';
+import 'package:puzzle_Store/route_generator.dart';
 
 void main() {
   runApp(MyApp());
@@ -31,7 +30,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: LogIn(),
+      initialRoute: '/',
+      onGenerateRoute: RouteGenerator.routeGenerator,
     );
   }
 }
