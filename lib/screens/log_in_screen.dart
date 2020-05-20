@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class LogIn extends StatefulWidget {
   @override
@@ -7,8 +10,9 @@ class LogIn extends StatefulWidget {
 
 class _LogInState extends State<LogIn> {
   final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   String _email, _password;
-  bool _obsecureText = true;
+  bool _obsecureText = true, _isSubmitting = false;
   final greyColor = Color(0xff7e7f81);
   InputDecoration sharedTextInputDecoration(String title) {
     return InputDecoration(
@@ -60,9 +64,13 @@ class _LogInState extends State<LogIn> {
         onPressed: () {
           _submit();
         },
-        child: Text(
-          'Login',
-        ),
+        child: _isSubmitting
+            ? CircularProgressIndicator(
+                backgroundColor: Colors.black,
+              )
+            : Text(
+                'Login',
+              ),
         color: Colors.white,
       ),
     );
@@ -155,19 +163,49 @@ class _LogInState extends State<LogIn> {
     );
   }
 
-  _submit() {
+  _submit() async {
     final form = _formKey.currentState;
     if (form.validate()) {
       form.save();
-      print('$_email , $_password');
+      registerUser();
+      _showSuccessSnack();
     } else {
       print('there is an error in submitting');
     }
   }
 
+  void _showSuccessSnack() {
+    final snackbar = SnackBar(
+      content: Text('$_email is successfuly logged in'),
+    );
+    _scaffoldKey.currentState.showSnackBar(snackbar);
+    _formKey.currentState.reset();
+  }
+
+  void registerUser() async {
+    setState(() {
+      _isSubmitting = true;
+    });
+    http.Response response = await http.post('http://10.0.2.2:1337/auth/local/',
+        body: {"identifier": _email, "password": _password});
+    final responseData = json.decode(response.body);
+    setState(() {
+      _isSubmitting = false;
+    });
+    print(responseData);
+    _redirectUser();
+  }
+
+  void _redirectUser() {
+    Future.delayed(Duration(seconds: 2), () {
+      Navigator.popAndPushNamed(context, '/products');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: SingleChildScrollView(
         child: Container(
             child: Column(
