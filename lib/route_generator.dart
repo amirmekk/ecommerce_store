@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:puzzle_Store/screens/log_in_screen.dart';
+import 'package:puzzle_Store/screens/products_screen.dart';
 import 'package:puzzle_Store/screens/sign_up_screen.dart';
 
 class RouteGenerator {
@@ -9,7 +10,9 @@ class RouteGenerator {
       case '/':
         return MaterialPageRoute(builder: (_) => SignUp());
       case '/register':
-        return MaterialPageRoute(builder: (_) => SignUp());  
+        return MaterialPageRoute(builder: (_) => SignUp());
+      case '/products':
+        return MaterialPageRoute(builder: (_) => Products());
       case '/login':
         return MaterialPageRoute(builder: (_) => LogIn());
 
