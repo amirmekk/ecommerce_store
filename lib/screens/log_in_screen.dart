@@ -7,6 +7,8 @@ class LogIn extends StatefulWidget {
 
 class _LogInState extends State<LogIn> {
   final _formKey = GlobalKey<FormState>();
+  String _email, _password;
+  bool _obsecureText = true;
   final greyColor = Color(0xff7e7f81);
   InputDecoration sharedTextInputDecoration(String title) {
     return InputDecoration(
@@ -55,7 +57,9 @@ class _LogInState extends State<LogIn> {
       width: MediaQuery.of(context).size.width,
       height: 120.0,
       child: FlatButton(
-        onPressed: () {},
+        onPressed: () {
+          _submit();
+        },
         child: Text(
           'Login',
         ),
@@ -68,7 +72,9 @@ class _LogInState extends State<LogIn> {
     return Container(
       padding: EdgeInsets.only(left: 40.0),
       child: FlatButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).pushReplacementNamed('/register');
+        },
         child: Text(
           'new user? Create an account',
           style: TextStyle(
@@ -87,22 +93,76 @@ class _LogInState extends State<LogIn> {
         child: Column(
           children: <Widget>[
             TextFormField(
+              onSaved: (value) => _email = value,
+              validator: (value) {
+                bool emailValid = RegExp(
+                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                    .hasMatch(value);
+                if (!emailValid) {
+                  return 'email is not valid';
+                } else {
+                  return null;
+                }
+              },
               style: TextStyle(
                 color: Colors.white,
               ),
               decoration: sharedTextInputDecoration('Email'),
             ),
             TextFormField(
+              onSaved: (value) => _password = value,
+              validator: (value) {
+                if (value.length < 6) {
+                  return 'password is too short';
+                } else {
+                  return null;
+                }
+              },
               style: TextStyle(
                 color: Colors.white,
               ),
-              obscureText: true,
-              decoration: sharedTextInputDecoration('Password'),
+              obscureText: _obsecureText,
+              decoration: InputDecoration(
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.white,
+                  ),
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Colors.grey,
+                  ),
+                ),
+                labelText: 'Password',
+                labelStyle: TextStyle(
+                  color: greyColor,
+                ),
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _obsecureText = !_obsecureText;
+                    });
+                  },
+                  icon: _obsecureText
+                      ? Icon(Icons.visibility, color: greyColor)
+                      : Icon(Icons.visibility_off, color: greyColor),
+                ),
+              ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  _submit() {
+    final form = _formKey.currentState;
+    if (form.validate()) {
+      form.save();
+      print('$_email , $_password');
+    } else {
+      print('there is an error in submitting');
+    }
   }
 
   @override
