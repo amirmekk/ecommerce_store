@@ -1,0 +1,20 @@
+{
+  "defaultConnection": "default",
+  "connections": {
+    "default": {
+      "connector": "mongoose",
+      "settings": {
+        "database": "server",
+        "host": "@puzzlstorecluster-3ypps.gcp.mongodb.net",
+        "srv": "true",
+        "port": 27017,
+        "username": "amirmekk",
+        "password": "s159753S"
+      },
+      "options": {
+        "authenticationDatabase": "",
+        "ssl": true
+      }
+    }
+  }
+}
