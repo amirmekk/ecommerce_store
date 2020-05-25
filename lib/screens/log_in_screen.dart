@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LogIn extends StatefulWidget {
   @override
@@ -11,6 +12,7 @@ class LogIn extends StatefulWidget {
 class _LogInState extends State<LogIn> {
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   String _email, _password;
   bool _obsecureText = true, _isSubmitting = false;
   final greyColor = Color(0xff7e7f81);
@@ -76,7 +78,7 @@ class _LogInState extends State<LogIn> {
     );
   }
 
-  Widget newUserButton() {
+  Widget signUpButton() {
     return Container(
       padding: EdgeInsets.only(left: 40.0),
       child: FlatButton(
@@ -168,7 +170,6 @@ class _LogInState extends State<LogIn> {
     if (form.validate()) {
       form.save();
       registerUser();
-      _showSuccessSnack();
     } else {
       print('there is an error in submitting');
     }
@@ -182,6 +183,18 @@ class _LogInState extends State<LogIn> {
     _formKey.currentState.reset();
   }
 
+  void _showErrorSnack(String errorMsg) {
+    final snackbar = SnackBar(
+      content: Text(
+        errorMsg,
+        style: TextStyle(
+          color: Colors.red,
+        ),
+      ),
+    );
+    _scaffoldKey.currentState.showSnackBar(snackbar);
+  }
+
   void registerUser() async {
     setState(() {
       _isSubmitting = true;
@@ -189,17 +202,35 @@ class _LogInState extends State<LogIn> {
     http.Response response = await http.post('http://10.0.2.2:1337/auth/local/',
         body: {"identifier": _email, "password": _password});
     final responseData = json.decode(response.body);
-    setState(() {
-      _isSubmitting = false;
-    });
     print(responseData);
-    _redirectUser();
+
+    if (response.statusCode == 200) {
+      setState(() {
+        _isSubmitting = false;
+      });
+      _storeUserData(responseData);
+      _showSuccessSnack();
+      _redirectUser();
+    } else {
+      setState(() {
+        _isSubmitting = false;
+      });
+      _showErrorSnack(responseData['message'][0]['messages'][0]['message']);
+    }
   }
 
   void _redirectUser() {
     Future.delayed(Duration(seconds: 2), () {
       Navigator.popAndPushNamed(context, '/products');
     });
+  }
+
+  void _storeUserData(data) async {
+    final prefs = await SharedPreferences.getInstance();
+    final String jwt = data['jwt'];
+    final Map<String, dynamic> user = data['user'];
+    user.putIfAbsent('jwt', () => jwt);
+    prefs.setString('user', json.encode(user));
   }
 
   @override
@@ -213,7 +244,7 @@ class _LogInState extends State<LogIn> {
             mrPuzzleTitleWidget(),
             logInForm(),
             logInButton(),
-            newUserButton(),
+            signUpButton(),
           ],
         )),
       ),
