@@ -8,12 +8,15 @@ import 'package:puzzle_Store/screens/products_screen.dart';
 import 'package:puzzle_Store/screens/sign_up_screen.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:redux_logging/redux_logging.dart';
+
+
 
 void main() {
   final store = Store<AppState>(
     appReducer,
     initialState: AppState.initial(),
-    middleware: [thunkMiddleware],
+    middleware: [thunkMiddleware, LoggingMiddleware.printer()],
   );
   runApp(MyApp(store: store));
 }
@@ -49,6 +52,8 @@ class MyApp extends StatelessWidget {
         routes: {
           '/products': (BuildContext context) => Products(onInit: () {
                 StoreProvider.of<AppState>(context).dispatch(getUserAction);
+                StoreProvider.of<AppState>(context).dispatch(getProductAction);
+
               }),
           '/register': (BuildContext context) => SignUp(),
           '/login': (BuildContext context) => LogIn(),
