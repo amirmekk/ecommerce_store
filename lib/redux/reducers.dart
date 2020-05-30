@@ -14,10 +14,13 @@ User userReducer(User user, dynamic action) {
   if (action is GetUserAction) {
     return action.user;
   }
+  if (action is LogUserOutAction) {
+    return action.user;
+  }
   return user;
 }
 
-List<Product> productsReducer(List<Product>product, dynamic action) {
+List<Product> productsReducer(List<Product> product, dynamic action) {
   if (action is GetProductAction) {
     return action.products;
   }

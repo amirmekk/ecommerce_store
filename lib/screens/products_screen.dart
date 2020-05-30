@@ -19,21 +19,28 @@ class _ProductsState extends State<Products> {
     widget.onInit();
   }
 
-  AppBar customAppBar = AppBar(
-    backgroundColor: Colors.black,
-    elevation: 0.0,
-    leading: IconButton(icon: Icon(Icons.menu), onPressed: () {}),
-    actions: <Widget>[
-      IconButton(
-          icon: Icon(Icons.perm_identity),
-          onPressed: () {
-            // Navigator.pushNamed(context, '/login');
-          }),
-    ],
-  );
+  AppBar customAppBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.black,
+      elevation: 0.0,
+      leading:
+          IconButton(icon: Icon(Icons.menu), onPressed: () {}, iconSize: 30),
+      actions: <Widget>[
+        IconButton(
+            iconSize: 30,
+            icon: Icon(
+              Icons.perm_identity,
+            ),
+            onPressed: () {
+              Navigator.pushNamed(context, '/profile');
+            }),
+      ],
+    );
+  }
+
   Widget customBottomNavBar(BuildContext context, AppState store) {
     return SizedBox(
-      height: 150.0,
+      height: 120.0,
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -100,27 +107,27 @@ class _ProductsState extends State<Products> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-    Padding(
-      padding: const EdgeInsets.only(left: 20.0),
-      child: Text(
-        'For You',
-        style: GoogleFonts.getFont(
-          'Manrope',
-          textStyle: TextStyle(
-            color: Colors.white,
-            fontSize: 25,
+        Padding(
+          padding: const EdgeInsets.only(left: 20.0),
+          child: Text(
+            'For You',
+            style: GoogleFonts.getFont(
+              'Manrope',
+              textStyle: TextStyle(
+                color: Colors.white,
+                fontSize: 25,
+              ),
+            ),
           ),
         ),
-      ),
-    ),
-    Expanded(
-      child: ListView.builder(
-        itemCount: store.products.length,
-        itemBuilder: (BuildContext context, int index) {
-          return ProuctItem(store.products[index]);
-        },
-      ),
-    ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: store.products.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ProuctItem(store.products[index]);
+            },
+          ),
+        ),
       ],
     );
   }
@@ -140,7 +147,7 @@ class _ProductsState extends State<Products> {
         return Scaffold(
           body: productList(context, state),
           bottomNavigationBar: customBottomNavBar(context, state),
-          appBar: customAppBar,
+          appBar: customAppBar(context),
         );
       },
     );

@@ -5,12 +5,11 @@ import 'package:puzzle_Store/redux/actions.dart';
 import 'package:puzzle_Store/redux/reducers.dart';
 import 'package:puzzle_Store/screens/log_in_screen.dart';
 import 'package:puzzle_Store/screens/products_screen.dart';
+import 'package:puzzle_Store/screens/profile_page.dart';
 import 'package:puzzle_Store/screens/sign_up_screen.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:redux_logging/redux_logging.dart';
-
-
 
 void main() {
   final store = Store<AppState>(
@@ -48,15 +47,19 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        initialRoute: '/login',
+        initialRoute: '/',
         routes: {
+          '/': (BuildContext context) => Products(onInit: () {
+                StoreProvider.of<AppState>(context).dispatch(getUserAction);
+                StoreProvider.of<AppState>(context).dispatch(getProductAction);
+              }),
           '/products': (BuildContext context) => Products(onInit: () {
                 StoreProvider.of<AppState>(context).dispatch(getUserAction);
                 StoreProvider.of<AppState>(context).dispatch(getProductAction);
-
               }),
           '/register': (BuildContext context) => SignUp(),
           '/login': (BuildContext context) => LogIn(),
+          '/profile': (BuildContext context) => ProfilePage(),
         },
         //onGenerateRoute: RouteGenerator.routeGenerator,
       ),

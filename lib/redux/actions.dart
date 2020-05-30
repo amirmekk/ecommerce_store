@@ -23,13 +23,27 @@ class GetUserAction {
   GetUserAction(this._user);
 }
 
+ThunkAction<AppState> logUserOutAction = (Store<AppState> store) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.remove('user');
+  User user;
+
+  store.dispatch(LogUserOutAction(user));
+};
+
+class LogUserOutAction {
+  final User _user;
+  User get user => this._user;
+  LogUserOutAction(this._user);
+}
+
 // product action list
 ThunkAction<AppState> getProductAction = (Store<AppState> store) async {
   http.Response response = await http.get(
     'http://10.0.2.2:1337/products',
   );
   final List responseData = json.decode(response.body);
-  List<Product> products=[];
+  List<Product> products = [];
   responseData.forEach((element) {
     final Product product = Product.fromJson(element);
     products.add(product);
