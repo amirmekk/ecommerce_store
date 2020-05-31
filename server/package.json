@@ -19,7 +19,8 @@
     "strapi-plugin-users-permissions": "3.0.0-beta.20",
     "strapi-plugin-email": "3.0.0-beta.20",
     "strapi-plugin-upload": "3.0.0-beta.20",
-    "strapi-connector-mongoose": "3.0.0-beta.20"
+    "strapi-connector-mongoose": "3.0.0-beta.20",
+    "axios" : "latest"
   },
   "author": {
     "name": "A Strapi developer"

@@ -29,7 +29,9 @@ List<Product> productsReducer(List<Product> product, dynamic action) {
 }
 
 List<Product> cartReducer(List<Product> product, dynamic action) {
-  if (action is ToggleProductInCartAction) {
+  if (action is GetCartProductAction) {
+    return action.products;
+  } else if (action is ToggleProductInCartAction) {
     return action.products;
   }
   return product;

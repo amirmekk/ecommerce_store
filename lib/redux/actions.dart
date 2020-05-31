@@ -59,7 +59,7 @@ class GetProductAction {
 
 //cart action
 ThunkAction<AppState> toggleProductInCartAction(Product product) {
-  return (Store<AppState> store) {
+  return (Store<AppState> store) async {
     final List<Product> existingCartProducts = store.state.cart;
     final indexOfProduct =
         existingCartProducts.indexWhere((element) => product.id == element.id);
@@ -70,7 +70,12 @@ ThunkAction<AppState> toggleProductInCartAction(Product product) {
     } else {
       updatedCartProducts.add(product);
     }
-    //print('my updated cart is : $updatedCartProducts');
+    final List<String> cartProductsIds = updatedCartProducts.map((element) {
+      return element.id;
+    }).toList();
+    await http.put('http://10.0.2.2:1337/carts/${store.state.user.cartId}',
+        headers: {"Authorization": 'Bearer ${store.state.user.jwt}'},
+        body: {'products': json.encode(cartProductsIds)});
     store.dispatch(ToggleProductInCartAction(updatedCartProducts));
   };
 }
@@ -79,4 +84,30 @@ class ToggleProductInCartAction {
   final List<Product> _products;
   List<Product> get products => this._products;
   ToggleProductInCartAction(this._products);
+}
+
+ThunkAction<AppState> getCartProductsAction = (Store<AppState> store) async {
+  final prefs = await SharedPreferences.getInstance();
+  final String storedUser = prefs.getString('user');
+  if (storedUser == null) {
+    return;
+  }
+  final User user = User.fromJson(json.decode(storedUser));
+  List<Product> cartProducts = [];
+  http.Response response = await http.get(
+      'http://10.0.2.2:1337/carts/${user.cartId}',
+      headers: {'Authorization': 'Bearer ${user.jwt}'});
+  final responseData = json.decode(response.body)['products'];
+  responseData.forEach((item) {
+    final Product product = Product.fromJson(item);
+    cartProducts.add(product);
+  });
+  print('my response data is : $responseData');
+  store.dispatch(GetCartProductAction(cartProducts));
+};
+
+class GetCartProductAction {
+  final List<Product> _products;
+  List<Product> get products => _products;
+  GetCartProductAction(this._products);
 }

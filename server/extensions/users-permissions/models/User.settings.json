@@ -54,8 +54,11 @@
       "configurable": false
     },
     "products": {
-      "via": "user",
-      "collection": "product"
+      "collection": "product",
+      "via": "user"
+    },
+    "cart_id": {
+      "type": "string"
     }
   }
 }
