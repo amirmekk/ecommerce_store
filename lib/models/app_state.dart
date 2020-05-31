@@ -5,11 +5,13 @@ import 'package:puzzle_Store/models/product.dart';
 class AppState {
   final dynamic user;
   final List<Product> products;
-  AppState({@required this.user, @required this.products});
+  final List<Product> cart;
+  AppState({@required this.user, @required this.products, @required this.cart});
   factory AppState.initial() {
     return AppState(
       user: null,
       products: [],
+      cart: [],
     );
   }
 }

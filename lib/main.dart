@@ -3,6 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:puzzle_Store/models/app_state.dart';
 import 'package:puzzle_Store/redux/actions.dart';
 import 'package:puzzle_Store/redux/reducers.dart';
+import 'package:puzzle_Store/screens/cart_screen.dart';
 import 'package:puzzle_Store/screens/log_in_screen.dart';
 import 'package:puzzle_Store/screens/products_screen.dart';
 import 'package:puzzle_Store/screens/profile_page.dart';
@@ -60,6 +61,7 @@ class MyApp extends StatelessWidget {
           '/register': (BuildContext context) => SignUp(),
           '/login': (BuildContext context) => LogIn(),
           '/profile': (BuildContext context) => ProfilePage(),
+          '/cart': (BuildContext context) => Cart(),
         },
         //onGenerateRoute: RouteGenerator.routeGenerator,
       ),

@@ -56,3 +56,27 @@ class GetProductAction {
   List<Product> get products => this._products;
   GetProductAction(this._products);
 }
+
+//cart action
+ThunkAction<AppState> toggleProductInCartAction(Product product) {
+  return (Store<AppState> store) {
+    final List<Product> existingCartProducts = store.state.cart;
+    final indexOfProduct =
+        existingCartProducts.indexWhere((element) => product.id == element.id);
+    List<Product> updatedCartProducts = List.from(existingCartProducts);
+    final isInCart = indexOfProduct > -1 == true;
+    if (isInCart) {
+      updatedCartProducts.removeAt(indexOfProduct);
+    } else {
+      updatedCartProducts.add(product);
+    }
+    //print('my updated cart is : $updatedCartProducts');
+    store.dispatch(ToggleProductInCartAction(updatedCartProducts));
+  };
+}
+
+class ToggleProductInCartAction {
+  final List<Product> _products;
+  List<Product> get products => this._products;
+  ToggleProductInCartAction(this._products);
+}

@@ -124,7 +124,7 @@ class _ProductsState extends State<Products> {
           child: ListView.builder(
             itemCount: store.products.length,
             itemBuilder: (BuildContext context, int index) {
-              return ProuctItem(store.products[index]);
+              return ProuctItem(store.products[index], store);
             },
           ),
         ),
@@ -138,7 +138,6 @@ class _ProductsState extends State<Products> {
     });
   }
 
-  //List<Widget> _children = [Text('1'), Text('2'), Text('3')];
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(

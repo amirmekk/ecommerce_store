@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:puzzle_Store/models/app_state.dart';
 import 'package:puzzle_Store/models/product.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:puzzle_Store/redux/actions.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final Product item;
@@ -10,6 +13,18 @@ class ProductDetailPage extends StatefulWidget {
 }
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
+  bool _isInCart(AppState state, String id) {
+    final List<Product> existingCartProducts = state.cart;
+    final indexOfProduct =
+        existingCartProducts.indexWhere((element) => id == element.id);
+    final isInCart = indexOfProduct > -1 == true;
+    if (isInCart) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,8 +93,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               size: 30,
             ),
             onPressed: () {
-              //Navigator.pop(context);
-              print('go to shopping cart');
+              Navigator.of(context).pushNamed('/cart');
             },
           ),
         ],
@@ -120,19 +134,28 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               ),
               FlatButton(
                 color: Colors.black,
-                onPressed: () {},
+                onPressed: () {
+                  StoreProvider.of<AppState>(context)
+                      .dispatch(toggleProductInCartAction(widget.item));
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(15.0),
-                  child: Text(
-                    'Add to cart',
-                    style: GoogleFonts.getFont(
-                      'Manrope',
-                      textStyle: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ),
+                  child: StoreConnector<AppState, AppState>(
+                      converter: (store) => store.state,
+                      builder: (context, state) {
+                        return Text(
+                          _isInCart(state, widget.item.id)
+                              ? 'Remove from cart'
+                              : 'Add to cart',
+                          style: GoogleFonts.getFont(
+                            'Manrope',
+                            textStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                            ),
+                          ),
+                        );
+                      }),
                 ),
               )
             ],
