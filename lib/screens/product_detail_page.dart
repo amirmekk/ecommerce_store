@@ -4,6 +4,7 @@ import 'package:puzzle_Store/models/app_state.dart';
 import 'package:puzzle_Store/models/product.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:puzzle_Store/redux/actions.dart';
+import 'package:badges/badges.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final Product item;
@@ -87,10 +88,18 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
         ),
         actions: <Widget>[
           IconButton(
-            icon: Icon(
-              Icons.shopping_basket,
-              color: Colors.white,
-              size: 30,
+            icon: Badge(
+              badgeColor: Colors.white,
+              badgeContent: StoreConnector<AppState, AppState>(
+                  converter: (store) => store.state,
+                  builder: (context, state) {
+                    return Text('${state.cart.length}');
+                  }),
+              child: Icon(
+                Icons.shopping_basket,
+                color: Colors.white,
+                size: 30,
+              ),
             ),
             onPressed: () {
               Navigator.of(context).pushNamed('/cart');
