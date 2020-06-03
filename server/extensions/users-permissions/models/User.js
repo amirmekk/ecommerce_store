@@ -4,6 +4,9 @@
  * Lifecycle callbacks for the `cart` model.
  */
 const axios = require('axios');
+require('dotenv').config();
+const secretKey = process.env.SECRETKEY;
+const stripe = require('stripe')(`${secretKey}`);
 module.exports = {
     // Before saving a value.
     // Fired before an `insert` or `update` query.
@@ -32,8 +35,13 @@ module.exports = {
     // Before creating a value.
     // Fired before an `insert` query.
     beforeCreate: async (model, attrs, options) => {
+        const customer = await stripe.customers.create({
+            email: model.get('email'),
+        });
         const cart = await axios.post('http://localhost:1337/carts');
-        model.set('cart_id' , cart.data.id);
+        model.set('cart_id', cart.data.id);
+        model.set('stripe_id', customer.id);
+
     },
 
     // After creating a value.

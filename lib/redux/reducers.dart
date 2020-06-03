@@ -8,6 +8,8 @@ AppState appReducer(AppState state, dynamic action) {
     user: userReducer(state.user, action),
     products: productsReducer(state.products, action),
     cart: cartReducer(state.cart, action),
+    cards: cardsReducer(state.cards, action),
+    cardToken: cardTokenReducer(state.cardToken, action),
   );
 }
 
@@ -35,4 +37,20 @@ List<Product> cartReducer(List<Product> product, dynamic action) {
     return action.products;
   }
   return product;
+}
+
+List<dynamic> cardsReducer(List<dynamic> cards, dynamic action) {
+  if (action is GetCardsAction) {
+    return action.cards;
+  } else if (action is AddCardAction) {
+    return List.from(cards)..add(action.card);
+  }
+  return cards;
+}
+
+String cardTokenReducer(String cardToken, dynamic action) {
+  if (action is UpdateCardTokenAction) {
+    return action.cardToken;
+  }
+  return cardToken;
 }

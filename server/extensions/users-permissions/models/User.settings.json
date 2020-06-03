@@ -59,6 +59,12 @@
     },
     "cart_id": {
       "type": "string"
+    },
+    "stripe_id": {
+      "type": "string"
+    },
+    "card_token": {
+      "type": "string"
     }
   }
 }

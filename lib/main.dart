@@ -53,8 +53,8 @@ class MyApp extends StatelessWidget {
           '/': (BuildContext context) => Products(onInit: () {
                 StoreProvider.of<AppState>(context).dispatch(getUserAction);
                 StoreProvider.of<AppState>(context).dispatch(getProductAction);
-                StoreProvider.of<AppState>(context).dispatch(getCartProductsAction);
-
+                StoreProvider.of<AppState>(context)
+                    .dispatch(getCartProductsAction);
               }),
           '/products': (BuildContext context) => Products(onInit: () {
                 StoreProvider.of<AppState>(context).dispatch(getUserAction);
@@ -62,7 +62,9 @@ class MyApp extends StatelessWidget {
               }),
           '/register': (BuildContext context) => SignUp(),
           '/login': (BuildContext context) => LogIn(),
-          '/profile': (BuildContext context) => ProfilePage(),
+          '/profile': (BuildContext context) => ProfilePage(onInit: () {
+                StoreProvider.of<AppState>(context).dispatch(getCardsAction);
+              }),
           '/cart': (BuildContext context) => Cart(),
         },
         //onGenerateRoute: RouteGenerator.routeGenerator,

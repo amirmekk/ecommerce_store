@@ -111,3 +111,32 @@ class GetCartProductAction {
   List<Product> get products => _products;
   GetCartProductAction(this._products);
 }
+
+//card actions
+ThunkAction<AppState> getCardsAction = (Store<AppState> store) async {
+  final String stripeId = store.state.user.stripeId;
+  http.Response response =
+      await http.get('http://10.0.2.2:1337/card?$stripeId');
+  final responseData = json.decode(response.body);
+  print('my response data for profile page is : $responseData');
+  store.dispatch(GetCardsAction(responseData));
+};
+
+class GetCardsAction {
+  final List<dynamic> _cards;
+  List<dynamic> get cards => _cards;
+  GetCardsAction(this._cards);
+}
+
+class AddCardAction {
+  final dynamic _card;
+  dynamic get card => _card;
+  AddCardAction(this._card);
+}
+
+// card token action
+class UpdateCardTokenAction {
+  final String _cardToken;
+  String get cardToken => _cardToken;
+  UpdateCardTokenAction(this._cardToken);
+}
