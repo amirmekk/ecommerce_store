@@ -140,3 +140,17 @@ class UpdateCardTokenAction {
   String get cardToken => _cardToken;
   UpdateCardTokenAction(this._cardToken);
 }
+
+ThunkAction<AppState> getCardTokenAction = (Store<AppState> store) async {
+  final String jwt = store.state.user.jwt;
+  http.Response response = await http.get('http://10.0.2.2:1337/users/me',
+      headers: {'Authorization': 'Bearer $jwt'});
+  final responseData = json.decode(response.body);
+  store.dispatch(GetCardTokenAction(responseData['card_token']));
+};
+
+class GetCardTokenAction {
+  final String _cardToken;
+  String get cardToken => _cardToken;
+  GetCardTokenAction(this._cardToken);
+}

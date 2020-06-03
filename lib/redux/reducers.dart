@@ -49,7 +49,9 @@ List<dynamic> cardsReducer(List<dynamic> cards, dynamic action) {
 }
 
 String cardTokenReducer(String cardToken, dynamic action) {
-  if (action is UpdateCardTokenAction) {
+  if (action is GetCardTokenAction) {
+    return action.cardToken;
+  } else if (action is UpdateCardTokenAction) {
     return action.cardToken;
   }
   return cardToken;

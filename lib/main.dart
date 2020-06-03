@@ -64,6 +64,8 @@ class MyApp extends StatelessWidget {
           '/login': (BuildContext context) => LogIn(),
           '/profile': (BuildContext context) => ProfilePage(onInit: () {
                 StoreProvider.of<AppState>(context).dispatch(getCardsAction);
+                StoreProvider.of<AppState>(context)
+                    .dispatch(getCardTokenAction);
               }),
           '/cart': (BuildContext context) => Cart(),
         },

@@ -241,7 +241,7 @@ class _ProfilePageState extends State<ProfilePage> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           Text(
-            '**** **** **** ${state.cards[index]['last4']} ',
+            '**** **** **** ${state.cards[index]['card']['last4']} ',
             style: GoogleFonts.getFont(
               'Manrope',
               textStyle: TextStyle(
@@ -258,7 +258,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Padding(
                     padding: const EdgeInsets.only(right: 30.0),
                     child: Text(
-                      '${state.cards[index]['brand']}',
+                      '${state.cards[index]['card']['brand']}',
                       style: GoogleFonts.getFont(
                         'Manrope',
                         textStyle: TextStyle(
@@ -270,7 +270,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   Text(
-                    '${state.cards[index]['exp_month']}  / ${state.cards[index]['exp_year']}',
+                    '${state.cards[index]['card']['exp_month']}  / ${state.cards[index]['card']['exp_year']}',
                     style: GoogleFonts.getFont(
                       'Manrope',
                       textStyle: TextStyle(
@@ -283,10 +283,17 @@ class _ProfilePageState extends State<ProfilePage> {
                 ],
               ),
               FlatButton.icon(
-                onPressed: () {},
-                icon: Icon(Icons.star),
-                label: Text('set as primary'),
-              ),
+                onPressed: () {
+                  StoreProvider.of<AppState>(context).dispatch(
+                      UpdateCardTokenAction(state.cards[index]['id']));
+                },
+                icon: state.cards[index]['id'] == state.cardToken
+                    ? Icon(Icons.star)
+                    : Icon(Icons.star_border),
+                label: state.cards[index]['id'] == state.cardToken
+                    ? Text('primary card')
+                    : Text('set as primary'),
+              )
             ],
           ),
         ],
