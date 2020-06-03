@@ -12,9 +12,15 @@ const stripe = require('stripe')(`${secretKey}`);
 module.exports = {
   index: async (ctx, next) => {
     const stripeId = ctx.request.querystring;
+    const paymentMethods = await stripe.paymentMethods.list({
+      customer: `${stripeId}`,
+      type: 'card',
+    });
+    
     const stripeCustomerData = await stripe.customers.retrieve(stripeId);
     const cardData = stripeCustomerData.sources.data;
-    ctx.send(cardData);
+    //console.log(paymentMethods['data']);
+    ctx.send(paymentMethods['data']);
   },
   add: async (ctx, next) => {
     const { customer, source } = ctx.request.body;
