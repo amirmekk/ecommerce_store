@@ -17,8 +17,8 @@ module.exports = {
       type: 'card',
     });
     
-    const stripeCustomerData = await stripe.customers.retrieve(stripeId);
-    const cardData = stripeCustomerData.sources.data;
+    //const stripeCustomerData = await stripe.customers.retrieve(stripeId);
+    //const cardData = stripeCustomerData.sources.data;
     //console.log(paymentMethods['data']);
     ctx.send(paymentMethods['data']);
   },
