@@ -10,6 +10,16 @@ class Product {
       @required this.description,
       @required this.picture,
       @required this.price});
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'id': id,
+      'description': description,
+      'picture': picture,
+      'price': price,
+    };
+  }
+
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
         name: json['name'],

@@ -1,4 +1,5 @@
 import 'package:puzzle_Store/models/app_state.dart';
+import 'package:puzzle_Store/models/order.dart';
 import 'package:puzzle_Store/models/product.dart';
 import 'package:puzzle_Store/models/user.dart';
 import 'package:puzzle_Store/redux/actions.dart';
@@ -10,6 +11,7 @@ AppState appReducer(AppState state, dynamic action) {
     cart: cartReducer(state.cart, action),
     cards: cardsReducer(state.cards, action),
     cardToken: cardTokenReducer(state.cardToken, action),
+    orders: ordersReducer(state.orders, action),
   );
 }
 
@@ -35,6 +37,8 @@ List<Product> cartReducer(List<Product> product, dynamic action) {
     return action.products;
   } else if (action is ToggleProductInCartAction) {
     return action.products;
+  } else if (action is ClearCartAction) {
+    return action.products;
   }
   return product;
 }
@@ -55,4 +59,11 @@ String cardTokenReducer(String cardToken, dynamic action) {
     return action.cardToken;
   }
   return cardToken;
+}
+
+List<Order> ordersReducer(List<Order> orders, dynamic action) {
+  if (action is AddOrderAction) {
+    return List.from(orders)..add(action.order);
+  }
+  return orders;
 }

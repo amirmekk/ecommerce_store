@@ -141,6 +141,41 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
           ),
+          state.orders.length == 0
+              ? noRecieptsWidget()
+              : Expanded(
+                  //height: 100,
+                  child: ListView.builder(
+                    //padding: EdgeInsets.all(10),
+                    itemCount: state.orders.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        leading: Icon(Icons.monetization_on),
+                        title: Text(
+                          '${state.orders[index].amount}',
+                          style: GoogleFonts.getFont(
+                            'Manrope',
+                            textStyle: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                        subtitle: Text(
+                          '${state.orders[index].createdAt}',
+                          style: GoogleFonts.getFont(
+                            'Manrope',
+                            textStyle: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
           Divider(
             thickness: 1,
             color: Colors.grey,
@@ -219,6 +254,19 @@ class _ProfilePageState extends State<ProfilePage> {
   Text noCreditCardsWidget() {
     return Text(
       'you have no credit cards',
+      style: GoogleFonts.getFont(
+        'Manrope',
+        textStyle: TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+        ),
+      ),
+    );
+  }
+
+  Text noRecieptsWidget() {
+    return Text(
+      'When you buy something your reciepts will appear here.',
       style: GoogleFonts.getFont(
         'Manrope',
         textStyle: TextStyle(

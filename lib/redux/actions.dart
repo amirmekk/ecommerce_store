@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:puzzle_Store/models/app_state.dart';
+import 'package:puzzle_Store/models/order.dart';
 import 'package:puzzle_Store/models/product.dart';
 import 'package:puzzle_Store/models/user.dart';
 import 'package:redux_thunk/redux_thunk.dart';
@@ -112,6 +113,23 @@ class GetCartProductAction {
   GetCartProductAction(this._products);
 }
 
+ThunkAction<AppState> clearCartAction = (Store<AppState> store) async {
+  final String cartToken = store.state.user.cartId;
+  await http.put('http://10.0.2.2:1337/carts/$cartToken', headers: {
+    'Authorization': 'Bearer ${store.state.user.jwt}'
+  }, body: {
+    'products': json.encode([]),
+  });
+
+  store.dispatch(ClearCartAction(List(0)));
+};
+
+class ClearCartAction {
+  final List<Product> _products;
+  List<Product> get products => _products;
+  ClearCartAction(this._products);
+}
+
 //card actions
 ThunkAction<AppState> getCardsAction = (Store<AppState> store) async {
   final String stripeId = store.state.user.stripeId;
@@ -153,4 +171,11 @@ class GetCardTokenAction {
   final String _cardToken;
   String get cardToken => _cardToken;
   GetCardTokenAction(this._cardToken);
+}
+
+//order action
+class AddOrderAction {
+  final Order _order;
+  Order get order => _order;
+  AddOrderAction(this._order);
 }
